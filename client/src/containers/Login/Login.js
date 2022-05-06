@@ -11,7 +11,8 @@ const Login = () => {
         "password": "123456",
     })
 
-    const [avatar, setAvatar] = useState(null)
+    const [dataLogin, setDataLogin] = useState()
+
 
     const handleChangeInput = e => {
         const { name, value } = e.target
@@ -39,6 +40,8 @@ const Login = () => {
             body,
             config
         );
+
+        setDataLogin(data.user)
     }
     return (
         <div div className='regiter-login' >
@@ -57,6 +60,9 @@ const Login = () => {
             </div>
 
             <button onClick={Submit}>Submit</button>
+            {dataLogin && <span>
+                <img src={dataLogin.avatar}></img>
+            </span>}
         </div >
     )
 }

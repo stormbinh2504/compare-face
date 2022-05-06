@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { imageUpload } from '../../ultils/imageUpload'
 
 import { sdkVNPTService, authService } from '../../services';
+import axios from 'axios';
 
 const Register = () => {
 
@@ -45,7 +46,15 @@ const Register = () => {
             ...userData,
             avatar: imageURL.secure_url
         }
-        await authService.RegisterClient(body)
+        // await authService.RegisterClient(body)
+
+        const config = { headers: { "Content-Type": "application/json" } };
+
+        await axios.post(
+            `http://localhost:5000/api/register`,
+            body,
+            config
+        );
     }
     return (
         <div div className='regiter-login' >

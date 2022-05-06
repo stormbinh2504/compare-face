@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
     },
     avatar: {
         type: String,
-        // required: true,
+        required: true,
         // default: 'https://res.cloudinary.com/stormbinh2504/image/upload/v1624526109/hinh_anh_dep_girl_xinh_2018-_hinh_gai_xinh_1_cyxxxg.jpg'
     },
 }, {
