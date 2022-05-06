@@ -1,10 +1,10 @@
 
-import axios from '../axios';
+import axioscompareface from '../axioscompareface';
 const URL_EKYC = 'https://api.idg.vnpt.vn';
 
-const TOKEN_ID = 'db542f10-d32c-0481-e053-63199f0a6888';
-const TOKEN_KEY = 'MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJFuJ801Gfpu8K4kkHIN0J/kasfo1yvxRRkhi01zWKODme0vrDFDRHZ8YnyWK7JAqBvIoe8xGTXDbWvlh0vX9YsCAwEAAQ==';
-const AUTHORIZATION = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkYjU0MmRkMC01YjA5LTc5M2QtZTA1My02MzE5OWYwYTFjZjgiLCJhdWQiOlsicmVzdHNlcnZpY2UiXSwidXNlcl9uYW1lIjoibm5iaW5oMjUwNEBnbWFpbC5jb20iLCJzY29wZSI6WyJyZWFkIl0sImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0IiwibmFtZSI6Im5uYmluaDI1MDRAZ21haWwuY29tIiwidXVpZF9hY2NvdW50IjoiZGI1NDJkZDAtNWIwOS03OTNkLWUwNTMtNjMxOTlmMGExY2Y4IiwiYXV0aG9yaXRpZXMiOlsiVVNFUiJdLCJqdGkiOiJkZTNiMDkzZS0yNTFiLTRhNmUtYjRlYS0xNTQyOTA0ZjE1NTQiLCJjbGllbnRfaWQiOiJhZG1pbmFwcCJ9.09LnBRW62XMXKUgUFl-rKbbKgg84moIMjQuum7m892iN8ASvrrzSHogXMae4kRw3mPP5rguZE1AI-knER_ay1V9jDYnb2IIuydrP3RS2OmTFhZ9G9f8LK5NVpS9k10Id710ZMuP94smI0-fgI-1kScUiUqBt8YBPBVVHoPgQt_YpFv_mlWz3QRMuQANpiAivrh3fV_LRf7FQcCeoDV3IE7WVCsbuiMPx1jjQRJIxl_HFpo92X_PRgoz_wpIFgSLVQMrqd0-2OZS5sc9RPHGx114LoESSq3c0r5YRaDqbCTDqjM4piufFFFaLvV_x8CxX6HTmJUIZUWLmoHP4mqP2kA"
+const TOKEN_ID = 'cf677413-a4a6-35aa-e053-62199f0a934f';
+const TOKEN_KEY = 'MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAM5Fq/IpXhKqw0Ummp1UMs2M1KH4YJJ+zg2Dy3dI48OaFRDgwqSLsJng4KyReSDi/pylYFDL9lR1VqSmB29+HW0CAwEAAQ==';
+const AUTHORIZATION = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5MjAwZmEzZC0zN2QyLTExZWMtYTEzNy0xZGYxN2RlYmQyNzkiLCJhdWQiOlsicmVzdHNlcnZpY2UiXSwidXNlcl9uYW1lIjoiYWRtaW5AZHNjLmNvbS52biIsInNjb3BlIjpbInJlYWQiXSwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3QiLCJuYW1lIjoiYWRtaW5AZHNjLmNvbS52biIsInV1aWRfYWNjb3VudCI6IjkyMDBmYTNkLTM3ZDItMTFlYy1hMTM3LTFkZjE3ZGViZDI3OSIsImF1dGhvcml0aWVzIjpbIlVTRVIiXSwianRpIjoiNmJlODk3YTktMzJhOS00YjhhLTk4ZWItMWE3YWQ4MGZkM2E3IiwiY2xpZW50X2lkIjoiYWRtaW5hcHAifQ.HoIECREIjvfsydLfKiA6WkvCYSC-Uij_O5tEpkyw1tIOKpz75NOQ_YPuUzTJCw7kwZDDXB1HVxNTGhT_KPXQlIgSqT4m1BLRA51CnsSS-Sl-m0MVyz7nahslbzuZ1lQTqu1xv8teJkvC5gxlUMQEfjG8bnTPI4cxUhFZVpdabURlMyBukUJkq02kEubaOf2OxWs4cv8YzQGqIM0GHIg-snZsqEXZfdjt0-QTTjqfYatBapVUueXrHVm4agRvLTk5oev9GzcpWW-5Gs_YQsvWt1E-mpp1PYzplErcn3RbfClWQyTF5xKJBJc4LDhOJW6cxGTrhDFnVWvZUw2PM8CRGw"
 
 
 const sdkVNPTService = {
@@ -21,12 +21,31 @@ const sdkVNPTService = {
         form.append('file', data.file);
         form.append('title', data.title ? data.title : '',);
         form.append('description', data.description ? data.description : '')
-        return axios.post(url, form, header);
+        return axioscompareface.post(url, form, header);
     },
 
 
-    compare2Faces(data) {
-        let url = `${URL_EKYC}/ai/v1/face/compare`;
+    // compare2Faces(data) {
+    //     let url = `${URL_EKYC}/ai/v1/face/compare`;
+    //     let header = {
+    //         headers: {
+    //             "Token-id": TOKEN_ID,
+    //             "Token-key": TOKEN_KEY,
+    //             "Authorization": `Bearer ` + AUTHORIZATION,
+    //         },
+    //     }
+
+    //     let body = {
+    //         img_front: data && data.image_hash_front,
+    //         img_face: data && data.image_hash_face,
+    //         client_session: data.client_session,
+    //         token: 'token'
+    //     }
+    //     return axioscompareface.post(url, body, header);
+    // },
+
+    comparetwoFaces(data) {
+        let url = `${URL_EKYC}/face-service/face/verify`;
         let header = {
             headers: {
                 "Token-id": TOKEN_ID,
@@ -36,12 +55,21 @@ const sdkVNPTService = {
         }
 
         let body = {
-            img_front: data && data.image_hash_front,
-            img_face: data && data.image_hash_face,
-            client_session: data.client_session,
-            token: 'token'
+            img: data.hash,
+            id_card: data.id_card,
+            id_type: data.id_type,
+            unit: data.unit
         }
-        return axios.post(url, body, header);
+
+        // let body = {
+        //     img_front: data && data.image_hash_front,
+        //     img_face: data && data.image_hash_face,
+        //     client_session: data.client_session,
+        //     token: 'token'
+        // }
+
+
+        return axioscompareface.post(url, body, header);
     },
 }
 

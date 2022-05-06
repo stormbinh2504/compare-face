@@ -19,6 +19,24 @@ const Login = () => {
         setUserData({ ...userData, [name]: value })
     }
 
+    const comparetwoFaces = async () => {
+
+        let body = {
+            hash: "idg20220506-d0d3238d-6720-3187-e053-62199f0ac777/IDG01_7f9d26ca-cd17-11ec-aaa4-b9e0af3ed133",
+            id_card: "001200042709",
+            id_type: "CARD_ID",
+            unit: ""
+        }
+
+        await sdkVNPTService.comparetwoFaces(body)
+            .then((responses) => {
+                console.log("binh---1", responses)
+            })
+            .catch((error) => {
+
+            });
+    }
+
     const Submit = async () => {
 
 
@@ -42,6 +60,8 @@ const Login = () => {
         );
 
         setDataLogin(data.user)
+
+        await comparetwoFaces()
     }
     return (
         <div div className='regiter-login' >

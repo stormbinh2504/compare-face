@@ -39,6 +39,46 @@ const Register = () => {
         }
     }
 
+
+    const addFileServerEkyc = async () => {
+
+        const resObj = {
+            error: '',
+            data: '',
+            message: ''
+        }
+
+        let body = {
+            file: avatar,
+            title: 'Test title',
+            description: 'Test description'
+
+        }
+
+        await sdkVNPTService.addFileServerEkyc(body)
+            .then((responses) => {
+                responses = responses.data
+                if (responses) {
+                    resObj.error = false
+                    resObj.data = responses.object && responses.object.hash
+                    resObj.message = ''
+                } else {
+                    resObj.error = true
+                    resObj.data = ''
+                    resObj.message = 'lỗi cmnr'
+                }
+            })
+            .catch((error) => {
+                resObj.error = true
+                resObj.data = ''
+                resObj.message = error
+
+            });
+        console.log("binh---resObj1", resObj)
+
+        return resObj
+    }
+
     const Submit = async () => {
         let imageURL = await imageUploadTest(avatar)
         // setUserData({ ...userData, avatar: imageURL })
@@ -47,6 +87,9 @@ const Register = () => {
             avatar: imageURL.secure_url
         }
         // await authService.RegisterClient(body)
+
+        let resObj = await addFileServerEkyc()
+        console.log("binh---resObj", resObj)
 
         const config = { headers: { "Content-Type": "application/json" } };
 
