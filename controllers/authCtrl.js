@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const authCtrl = {
     register: async (req, res) => {
         try {
-            const { username, password, avatar } = req.body;
+            const { username, password, avatar, hashAvatar } = req.body;
             // let newUserName = username.toLowerCase().replace(/ /g, "");
 
             // const user_name = await Users.findOne({ username: newUserName });
@@ -24,6 +24,7 @@ const authCtrl = {
                 username: username,
                 password: passwordHash,
                 avatar: avatar,
+                hashAvatar: hashAvatar,
             });
 
             const access_token = createAccessToken({ id: newUser._id });
