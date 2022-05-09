@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from "react-redux";
 
-import { compressImage } from "../../ultils/imageUpload"
+import { compressImage } from "../../utils/imageUpload"
 import { sdkVNPTService, authService } from '../../services';
 import "./CompareFace.scss"
 
 const CompareFace = () => {
+  const { auth } = useSelector((state) => state);
 
   const addLibToDom = () => {
     let pathname = window.location.pathname
@@ -93,9 +95,11 @@ const CompareFace = () => {
   const handleCompare2Faces = async (data) => {
 
     const body = {
-      image_hash_front: "idg20220508-d0d3238d-6720-3187-e053-62199f0ac777/IDG01_a2900e27-cea8-11ec-bad5-99fd408e3de2",
+      // image_hash_front: "idg20220508-d0d3238d-6720-3187-e053-62199f0ac777/IDG01_a2900e27-cea8-11ec-bad5-99fd408e3de2",
+      image_hash_front: auth.user.hashAvatar,
       image_hash_face: data,
     }
+    
     await sdkVNPTService.compare2Faces(body)
       .then((res) => {
         console.log("binh---", res)
@@ -155,8 +159,8 @@ const CompareFace = () => {
         </div>
         <div id="error-ekyc" className="hidden">
           <p id="content-error-ekyc"></p>
-          <button className="btn-reload" onClick={handleReset}>reset</button>
-          <button onClick={handleSubmit}>Xác thực</button>
+          {/* <button className="btn-reload" onClick={handleReset}>reset</button> */}
+          <button className="btn btn-info" onClick={handleSubmit}>Xác thực</button>
         </div>
       </div>
     </div>

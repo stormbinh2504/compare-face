@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 
 // https://res.cloudinary.com/stormbinh2504/image/upload/v1651814101/binhha/qwxtedepjkgh9sptipxe.png
-import { compressImage } from "../../ultils/imageUpload"
+import { compressImage } from "../../utils/imageUpload"
 import { ekycServer, authService } from '../../services';
 
 const CompareFaceNew = () => {

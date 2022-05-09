@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from 'react'
-import { imageUpload } from '../../ultils/imageUpload'
-import { compressImage } from "../../ultils/imageUpload"
+import { imageUpload } from '../../utils/imageUpload'
 import { sdkVNPTService, authService } from '../../services';
+import { compressImage } from "../../utils/imageUpload"
+import { useSelector, useDispatch } from "react-redux";
 import { Link, useHistory } from 'react-router-dom'
-import axios from 'axios';
+import { login } from '../../redux/actions/authAction'
+
 import "./Login.scss"
 
 const Login = () => {
     const history = useHistory()
-    const [userData, setUserData] = useState({
-        "username": "binhhuun",
-        "password": "123456",
-    })
+    const dispatch = useDispatch()
+    const { auth } = useSelector((state) => state);
 
-    const [dataLogin, setDataLogin] = useState("")
+    const [userData, setUserData] = useState({
+        "username": "",
+        "password": "",
+    })
 
 
     const handleChangeInput = e => {
@@ -23,33 +26,10 @@ const Login = () => {
 
 
     const Submit = async () => {
-
-
         let body = {
             ...userData,
         }
-        // await authService.LoginClient(body)
-        //     .then(data => {
-        //         console.log("binh---data", data)
-        //     }).catch((e) => {
-        //         console.log(e)
-        //     })
-
-
-        const config = { headers: { "Content-Type": "application/json" } };
-
-        const { data } = await axios.post(
-            `http://localhost:5000/api/login`,
-            body,
-            config
-        );
-
-        if (data) {
-            setDataLogin(data.user)
-            setTimeout(() => {
-                history.push("/compare-face")
-            }, 200);
-        }
+        dispatch(login(body))
     }
 
 
@@ -61,6 +41,7 @@ const Login = () => {
                 <div className="form-group">
                     <label htmlFor="username">Username</label>
                     <input type="text" className="form-control" id="username"
+                        name="username"
                         onChange={handleChangeInput} value={userData.username}
                     />
                 </div>
@@ -68,13 +49,14 @@ const Login = () => {
                 <div className="form-group">
                     <label htmlFor="username">Password</label>
                     <input type="text" className="form-control" id="password"
+                        name="password"
                         onChange={handleChangeInput} value={userData.password}
                     />
                 </div>
 
                 {
-                    dataLogin !== "" && dataLogin.avatar && <div className="block-image">
-                        <img src={dataLogin.avatar} alt="" id="img" className="pre-image" />
+                    auth !== "" && auth.avatar && <div className="block-image">
+                        <img src={auth.avatar} alt="" id="img" className="pre-image" />
                     </div>
                 }
 

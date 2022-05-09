@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import { imageUpload } from '../../ultils/imageUpload'
+import { imageUpload } from '../../utils/imageUpload'
 import "./Register.scss"
 import { sdkVNPTService, authService, ekycServer } from '../../services';
-import { compressImage } from "../../ultils/imageUpload"
+import { compressImage } from "../../utils/imageUpload"
+import { useSelector, useDispatch } from "react-redux";
 import { Link, useHistory } from 'react-router-dom'
+import { register } from '../../redux/actions/authAction'
 
 import axios from 'axios';
 
 const Register = () => {
+
+    const dispatch = useDispatch()
+    const history = useHistory()
 
     const [imagePreURL, setImagPreURL] = useState("")
 
@@ -35,8 +40,8 @@ const Register = () => {
     }
 
     const [userData, setUserData] = useState({
-        "username": "binhhuun",
-        "password": "123456",
+        "username": "",
+        "password": "",
         "avatar": ""
     })
 
@@ -58,11 +63,7 @@ const Register = () => {
 
     const addFileServerEkyc = async () => {
 
-        const resObj = {
-            error: '',
-            data: '',
-            message: ''
-        }
+        const hashCode = ""
 
         let imageOptimize = await compressImage(avatar)
 
@@ -77,39 +78,27 @@ const Register = () => {
             .then((responses) => {
                 responses = responses.data
                 if (responses) {
-                    resObj.error = false
-                    resObj.data = responses.object && responses.object.hash
-                    resObj.message = ''
+                    hashCode = responses.object && responses.object.hash
                 }
             })
             .catch((error) => {
-                resObj.error = true
-                resObj.data = ''
-                resObj.message = error
-
+                hashCode = ''
             });
 
-        return resObj
+        return hashCode
     }
 
     const Submit = async () => {
         let imageOptimize = await compressImage(avatar)
         let imageURL = await imageUploadTest(imageOptimize)
+
+        const hashCode = await addFileServerEkyc();
         let body = {
             ...userData,
-            avatar: imageURL.secure_url
+            avatar: imageURL.secure_url,
+            hashAvatar: hashCode,
         }
-
-        let resObj = await addFileServerEkyc()
-        console.log("binh---resObj", resObj)
-
-        const config = { headers: { "Content-Type": "application/json" } };
-
-        await axios.post(
-            `http://localhost:5000/api/register`,
-            body,
-            config
-        );
+        dispatch(register(body))
     }
 
     let disableSubmit = imagePreURL !== "" && userData.password !== "" && userData.username !== ""
@@ -121,6 +110,7 @@ const Register = () => {
                 <div className="form-group">
                     <label htmlFor="username">Username</label>
                     <input type="text" className="form-control" id="username"
+                        name="username"
                         onChange={handleChangeInput} value={userData.username}
                     />
                 </div>
@@ -128,6 +118,7 @@ const Register = () => {
                 <div className="form-group">
                     <label htmlFor="username">Password</label>
                     <input type="text" className="form-control" id="password"
+                        name="password"
                         onChange={handleChangeInput} value={userData.password}
                     />
                 </div>
@@ -155,7 +146,7 @@ const Register = () => {
                 <button className="btn btn-dark w-100" onClick={Submit} disabled={!disableSubmit} >Register</button>
 
                 <p className="my-2">
-                    Already have an account? <Link to="/login" style={{ color: "crimson" }}>Login Now</Link>
+                    Already have an account? <Link to="/" style={{ color: "crimson" }}>Login Now</Link>
                 </p>
             </div>
         </div >
