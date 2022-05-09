@@ -1,13 +1,25 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from "react-redux";
+import { toast, ToastContainer } from "react-toastify";
+import { Link, useHistory } from 'react-router-dom'
 
 import { compressImage } from "../../utils/imageUpload"
 import { sdkVNPTService, authService } from '../../services';
+import { ToastSuccess, ToastError } from '../../utils/ToastUtil'
+
 import "./CompareFace.scss"
+import ModalLogin from '../Modal/ModalLogin';
+const STATUS_FACE = {
+  MATCH: "MATCH",
+  NOMATCH: "NOMATCH"
+}
 
 const CompareFace = () => {
+  const history = useHistory()
   const { auth } = useSelector((state) => state);
+  console.log("binh---auth1", auth)
 
+  const [isOpenModalLogin, setIsOpenModalLogin] = useState(false)
   const addLibToDom = () => {
     let pathname = window.location.pathname
     pathname = pathname.split('/')
@@ -38,8 +50,6 @@ const CompareFace = () => {
 
   }, []);
 
-
-
   const removeLibFromDom = () => {
     let sdk = document.getElementById("sdk-ekyc");
     let ekyc_sdk_intergrated = document.getElementById("ekyc_sdk_intergrated")
@@ -65,44 +75,40 @@ const CompareFace = () => {
 
 
   const uploadImage2Server = async (body) => {
-    alert(1)
-    const resObj = {
-      error: '',
-      data: '',
-      message: ''
-    }
-
+    let hashCode = ""
     await sdkVNPTService.addFileServerEkyc(body)
       .then((responses) => {
-        if (responses) {
-          console.log("binh----responses", responses)
-          resObj.error = false
-          resObj.data = responses.data.object.hash
-          resObj.message = ''
-        }
+        responses = responses.data
+        hashCode = responses.object && responses.object.hash
       })
       .catch((error) => {
-        resObj.error = true
-        resObj.data = ''
-        resObj.message = error
-
+        hashCode = ''
       });
-
-    return resObj
+    return hashCode
   }
 
 
   const handleCompare2Faces = async (data) => {
-
     const body = {
       // image_hash_front: "idg20220508-d0d3238d-6720-3187-e053-62199f0ac777/IDG01_a2900e27-cea8-11ec-bad5-99fd408e3de2",
       image_hash_front: auth.user.hashAvatar,
       image_hash_face: data,
     }
-    
+
     await sdkVNPTService.compare2Faces(body)
       .then((res) => {
-        console.log("binh---", res)
+        res = res.data
+        if (res && res.statusCode === 200) {
+          if (res.object.msg === STATUS_FACE.MATCH) {
+            ToastSuccess(res.object.result)
+            // history.push("/dashboard")
+            // window.location.pathname = "/dashboard"
+            setIsOpenModalLogin(true)
+          }
+          else {
+            ToastError(res.object.result)
+          }
+        }
       })
       .catch(error => {
         alert("catch" + error)
@@ -138,18 +144,26 @@ const CompareFace = () => {
           title: 'Upload image face',
           description: 'Test upload image face'
         }
-        let res = await uploadImage2Server(body)
-        if (res) {
-          await handleCompare2Faces(res.data)
+
+        let hashCode = await uploadImage2Server(body)
+        if (hashCode) {
+          await handleCompare2Faces(hashCode)
         } else {
-          alert('error when while upload', res && res.message)
+          alert('error when while upload')
         }
       }
     } else {
-      alert('Không tìm thấy ảnh, vui lòng thử lại')
+      ToastError("Không thấy token yêu cầu đăng nhập lại")
     }
   }
 
+  const handleRedirect = () => {
+    history.push("/")
+  }
+
+  const onCloseModalLogin = () => {
+    setIsOpenModalLogin(false)
+  }
   return (
     <div className='compare-face'>
       <div className='block-compare-face container'>
@@ -160,9 +174,11 @@ const CompareFace = () => {
         <div id="error-ekyc" className="hidden">
           <p id="content-error-ekyc"></p>
           {/* <button className="btn-reload" onClick={handleReset}>reset</button> */}
-          <button className="btn btn-info" onClick={handleSubmit}>Xác thực</button>
+          <button style={{ marginRight: "10px" }} className="btn btn-primary" onClick={handleRedirect}>Quay về đăng nhập</button>
+          <button className="btn btn-warning" onClick={handleSubmit}>Xác thực</button>
         </div>
       </div>
+      <ModalLogin isOpenModalLogin={isOpenModalLogin} onCloseModalLogin={onCloseModalLogin}></ModalLogin>
     </div>
   )
 }

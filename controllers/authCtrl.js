@@ -7,12 +7,12 @@ const authCtrl = {
     register: async (req, res) => {
         try {
             const { username, password, avatar, hashAvatar } = req.body;
-            // let newUserName = username.toLowerCase().replace(/ /g, "");
+            let newUserName = username.toLowerCase().replace(/ /g, "");
 
-            // const user_name = await Users.findOne({ username: newUserName });
+            const user_name = await Users.findOne({ username: newUserName });
 
-            // if (user_name)
-            //     return res.status(400).json({ msg: "This user name already exists." });
+            if (user_name)
+                return res.status(400).json({ msg: "This user name already exists." });
 
             if (password.length < 6)
                 return res

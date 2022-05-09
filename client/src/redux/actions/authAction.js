@@ -1,38 +1,18 @@
 import { GLOBALTYPES } from './globalTypes'
 import { postDataAPI } from '../../utils/fetchData'
 import { Link, useHistory } from 'react-router-dom'
+// import { browserHistory } from 'react-router'
+import { push } from "connected-react-router";
 
-export const login = (data) => async (dispatch) => {
-    try {
-        dispatch({ type: GLOBALTYPES.ALERT, payload: { loading: true } })
-        const res = await postDataAPI('login', data)
-        dispatch({
-            type: GLOBALTYPES.AUTH,
-            payload: {
-                token: res.data.access_token,
-                user: res.data.user
-            }
-        })
-
-        localStorage.setItem("firstLogin", true)
-        dispatch({
-            type: GLOBALTYPES.ALERT,
-            payload: {
-                success: res.data.msg
-            }
-        })
-
-        // if(res){
-        //     window.location.pathname="/compare-face"
-        // }
-    } catch (err) {
-        dispatch({
-            type: GLOBALTYPES.ALERT,
-            payload: {
-                error: err.response.data.msg
-            }
-        })
-    }
+export const login = (res) => async (dispatch) => {
+    dispatch({
+        type: GLOBALTYPES.AUTH,
+        payload: {
+            token: res.data.access_token,
+            user: res.data.user
+        }
+    })
+    localStorage.setItem("firstLogin", true)
 }
 
 
@@ -67,7 +47,6 @@ export const refreshToken = () => async (dispatch) => {
 export const register = (data) => async (dispatch) => {
     try {
         dispatch({ type: GLOBALTYPES.ALERT, payload: { loading: true } })
-        alert(2)
         const res = await postDataAPI('register', data)
         // dispatch({
         //     type: GLOBALTYPES.AUTH,

@@ -1,0 +1,14 @@
+.header {
+    display        : flex;
+    justify-content: space-between;
+    align-items    : center;
+    height         : 56px;
+    background     : #131231;
+    width          : 100%;
+    padding        : 0 10px;
+    font-weight    : 500;
+    font-size      : 14px;
+    color          : #fff;
+    position       : absolute;
+    top            : 0;
+}

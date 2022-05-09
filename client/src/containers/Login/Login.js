@@ -5,6 +5,8 @@ import { compressImage } from "../../utils/imageUpload"
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useHistory } from 'react-router-dom'
 import { login } from '../../redux/actions/authAction'
+import { ToastSuccess, ToastError } from '../../utils/ToastUtil'
+import { postDataAPI } from '../../utils/fetchData'
 
 import "./Login.scss"
 
@@ -29,7 +31,23 @@ const Login = () => {
         let body = {
             ...userData,
         }
-        dispatch(login(body))
+
+        try {
+            await postDataAPI('login', body)
+                .then(res => {
+                    if (res) {
+                        ToastSuccess(res.data.msg);
+                        dispatch(login(res))
+                        history.push("/compare-face")
+                    }
+                })
+                .catch(error => {
+                    ToastError("Username or password not correct");
+                });
+        } catch (err) {
+            ToastError("error");
+        }
+
     }
 
 

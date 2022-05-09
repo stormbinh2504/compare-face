@@ -6,6 +6,8 @@ import { compressImage } from "../../utils/imageUpload"
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useHistory } from 'react-router-dom'
 import { register } from '../../redux/actions/authAction'
+import { ToastSuccess, ToastError } from '../../utils/ToastUtil'
+import { postDataAPI } from '../../utils/fetchData'
 
 import axios from 'axios';
 
@@ -63,7 +65,7 @@ const Register = () => {
 
     const addFileServerEkyc = async () => {
 
-        const hashCode = ""
+        let hashCode = ""
 
         let imageOptimize = await compressImage(avatar)
 
@@ -71,20 +73,16 @@ const Register = () => {
             file: imageOptimize,
             title: 'Test title',
             description: 'Test description'
-
         }
 
         await sdkVNPTService.addFileServerEkyc(body)
             .then((responses) => {
                 responses = responses.data
-                if (responses) {
-                    hashCode = responses.object && responses.object.hash
-                }
+                hashCode = responses.object && responses.object.hash
             })
             .catch((error) => {
                 hashCode = ''
             });
-
         return hashCode
     }
 
@@ -98,7 +96,27 @@ const Register = () => {
             avatar: imageURL.secure_url,
             hashAvatar: hashCode,
         }
-        dispatch(register(body))
+
+        try {
+            await postDataAPI('register', body)
+                .then(res => {
+                    if (res) {
+                        ToastSuccess(res.data.msg);
+                        setUserData({
+                            "username": "",
+                            "password": "",
+                            "avatar": ""
+                        })
+
+                        setImagPreURL("")
+                    }
+                })
+                .catch(error => {
+                    ToastError(error.response.data.msg);
+                });
+        } catch (err) {
+            ToastError("error");
+        }
     }
 
     let disableSubmit = imagePreURL !== "" && userData.password !== "" && userData.username !== ""
