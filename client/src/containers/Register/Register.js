@@ -1,10 +1,25 @@
 import React, { useState, useEffect } from 'react'
 import { imageUpload } from '../../ultils/imageUpload'
+import "./Register.scss"
+import { sdkVNPTService, authService, ekycServer } from '../../services';
+import { compressImage } from "../../ultils/imageUpload"
+import { Link, useHistory } from 'react-router-dom'
 
-import { sdkVNPTService, authService } from '../../services';
 import axios from 'axios';
 
 const Register = () => {
+
+    const [imagePreURL, setImagPreURL] = useState("")
+
+    const imageHandler = (file) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            if (reader.readyState === 2) {
+                setImagPreURL(reader.result)
+            }
+        }
+        reader.readAsDataURL(file)
+    };
 
     const imageUploadTest = async (images) => {
         const formData = new FormData()
@@ -36,6 +51,7 @@ const Register = () => {
         const file = e.target.files[0]
         if (e.target.files.length > 0) {
             setAvatar(file)
+            imageHandler(file)
         }
     }
 
@@ -48,8 +64,10 @@ const Register = () => {
             message: ''
         }
 
+        let imageOptimize = await compressImage(avatar)
+
         let body = {
-            file: avatar,
+            file: imageOptimize,
             title: 'Test title',
             description: 'Test description'
 
@@ -62,10 +80,6 @@ const Register = () => {
                     resObj.error = false
                     resObj.data = responses.object && responses.object.hash
                     resObj.message = ''
-                } else {
-                    resObj.error = true
-                    resObj.data = ''
-                    resObj.message = 'lỗi cmnr'
                 }
             })
             .catch((error) => {
@@ -74,19 +88,17 @@ const Register = () => {
                 resObj.message = error
 
             });
-        console.log("binh---resObj1", resObj)
 
         return resObj
     }
 
     const Submit = async () => {
-        let imageURL = await imageUploadTest(avatar)
-        // setUserData({ ...userData, avatar: imageURL })
+        let imageOptimize = await compressImage(avatar)
+        let imageURL = await imageUploadTest(imageOptimize)
         let body = {
             ...userData,
             avatar: imageURL.secure_url
         }
-        // await authService.RegisterClient(body)
 
         let resObj = await addFileServerEkyc()
         console.log("binh---resObj", resObj)
@@ -99,37 +111,53 @@ const Register = () => {
             config
         );
     }
+
+    let disableSubmit = imagePreURL !== "" && userData.password !== "" && userData.username !== ""
+
     return (
-        <div div className='regiter-login' >
-            <div className="form-group">
-                <label htmlFor="username">Username</label>
-                <input type="text" className="form-control" id="username"
-                    onChange={handleChangeInput} value={userData.username}
-                />
-            </div>
+        <div div className='regiter' >
+            <div div className='form-regiter' >
+                <h3 className="text-uppercase text-center mb-4">Register</h3>
+                <div className="form-group">
+                    <label htmlFor="username">Username</label>
+                    <input type="text" className="form-control" id="username"
+                        onChange={handleChangeInput} value={userData.username}
+                    />
+                </div>
 
-            <div className="form-group">
-                <label htmlFor="username">password</label>
-                <input type="text" className="form-control" id="password"
-                    onChange={handleChangeInput} value={userData.password}
-                />
-            </div>
+                <div className="form-group">
+                    <label htmlFor="username">Password</label>
+                    <input type="text" className="form-control" id="password"
+                        onChange={handleChangeInput} value={userData.password}
+                    />
+                </div>
 
-            <div className="form-group">
-                <label htmlFor="image">Select Image</label>
-                <input
-                    id="image"
-                    className=""
-                    style={{ width: '100%', display: 'none' }}
-                    type="file"
-                    accept=".jpeg,.jpg,.png"
-                    onChange={handleImageChange}
-                    name="files[]"
-                    multiple={false}
-                />
-            </div>
+                {
+                    imagePreURL !== "" && <div className="block-image">
+                        <img src={imagePreURL} alt="" id="img" className="pre-image" />
+                    </div>
+                }
 
-            <button onClick={Submit}>Submit</button>
+                <div className="form-group">
+                    <label htmlFor="image">Select Image</label>
+                    <input
+                        id="image"
+                        className=""
+                        style={{ width: '100%', display: 'none' }}
+                        type="file"
+                        accept=".jpeg,.jpg,.png"
+                        onChange={handleImageChange}
+                        name="files[]"
+                        multiple={false}
+                    />
+                </div>
+
+                <button className="btn btn-dark w-100" onClick={Submit} disabled={!disableSubmit} >Register</button>
+
+                <p className="my-2">
+                    Already have an account? <Link to="/login" style={{ color: "crimson" }}>Login Now</Link>
+                </p>
+            </div>
         </div >
     )
 }

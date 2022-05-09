@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 
+// https://res.cloudinary.com/stormbinh2504/image/upload/v1651814101/binhha/qwxtedepjkgh9sptipxe.png
 import { compressImage } from "../../ultils/imageUpload"
-import { sdkVNPTService, authService } from '../../services';
-import "./CompareFace.scss"
+import { ekycServer, authService } from '../../services';
 
-const CompareFace = () => {
+const CompareFaceNew = () => {
 
   const addLibToDom = () => {
     let pathname = window.location.pathname
@@ -18,6 +18,8 @@ const CompareFace = () => {
   }
 
   useEffect(() => {
+    // addLibToDom()
+
     const script = document.createElement("script");
     script.id = "libForSdk"
     script.src = process.env.PUBLIC_URL + "/libForSdk.js";
@@ -70,7 +72,7 @@ const CompareFace = () => {
       message: ''
     }
 
-    await sdkVNPTService.addFileServerEkyc(body)
+    await ekycServer.addFileServerEkyc(body)
       .then((responses) => {
         if (responses) {
           console.log("binh----responses", responses)
@@ -93,10 +95,10 @@ const CompareFace = () => {
   const handleCompare2Faces = async (data) => {
 
     const body = {
-      image_hash_front: "idg20220508-d0d3238d-6720-3187-e053-62199f0ac777/IDG01_a2900e27-cea8-11ec-bad5-99fd408e3de2",
+      image_hash_front: "idg20220506-d0d3238d-6720-3187-e053-62199f0ac777/IDG01_4d0c524a-cd55-11ec-bad5-b1ff6e8970bb",
       image_hash_face: data,
     }
-    await sdkVNPTService.compare2Faces(body)
+    await ekycServer.compare2Faces(body)
       .then((res) => {
         console.log("binh---", res)
       })
@@ -146,21 +148,20 @@ const CompareFace = () => {
     }
   }
 
+  console.log("binh---render")
   return (
     <div className='compare-face'>
-      <div className='block-compare-face container'>
-        <div id="ekyc_sdk_intergrated"></div>
-        <div id="face_image_ekyc">
-          <img id='image_result_ekyc' src="" alt="" />
-        </div>
-        <div id="error-ekyc" className="hidden">
-          <p id="content-error-ekyc"></p>
-          <button className="btn-reload" onClick={handleReset}>reset</button>
-          <button onClick={handleSubmit}>Xác thực</button>
-        </div>
+      <div id="ekyc_sdk_intergrated"></div>
+      <div id="face_image_ekyc">
+        <img id='image_result_ekyc' src="" alt="" />
+      </div>
+      <div id="error-ekyc" className="hidden">
+        <p id="content-error-ekyc"></p>
+        <button className="btn-reload" onClick={handleReset}>reset</button>
+        <button onClick={handleSubmit}>Xác thực</button>
       </div>
     </div>
   )
 }
 
-export default CompareFace
+export default CompareFaceNew

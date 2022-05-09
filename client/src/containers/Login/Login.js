@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import { imageUpload } from '../../ultils/imageUpload'
-
+import { compressImage } from "../../ultils/imageUpload"
 import { sdkVNPTService, authService } from '../../services';
+import { Link, useHistory } from 'react-router-dom'
 import axios from 'axios';
+import "./Login.scss"
 
 const Login = () => {
-
+    const history = useHistory()
     const [userData, setUserData] = useState({
         "username": "binhhuun",
         "password": "123456",
     })
 
-    const [dataLogin, setDataLogin] = useState()
+    const [dataLogin, setDataLogin] = useState("")
 
 
     const handleChangeInput = e => {
@@ -19,23 +21,6 @@ const Login = () => {
         setUserData({ ...userData, [name]: value })
     }
 
-    const comparetwoFaces = async () => {
-
-        let body = {
-            hash: "idg20220506-d0d3238d-6720-3187-e053-62199f0ac777/IDG01_7f9d26ca-cd17-11ec-aaa4-b9e0af3ed133",
-            id_card: "001200042709",
-            id_type: "CARD_ID",
-            unit: ""
-        }
-
-        await sdkVNPTService.comparetwoFaces(body)
-            .then((responses) => {
-                console.log("binh---1", responses)
-            })
-            .catch((error) => {
-
-            });
-    }
 
     const Submit = async () => {
 
@@ -59,30 +44,56 @@ const Login = () => {
             config
         );
 
-        setDataLogin(data.user)
-
-        await comparetwoFaces()
+        if (data) {
+            setDataLogin(data.user)
+            setTimeout(() => {
+                history.push("/compare-face")
+            }, 200);
+        }
     }
+
+
     return (
-        <div div className='regiter-login' >
-            <div className="form-group">
-                <label htmlFor="username">Username</label>
-                <input type="text" className="form-control" id="username"
-                    onChange={handleChangeInput} value={userData.username}
-                />
-            </div>
+        <div div className='login' >
+            <div div className='form-login' >
+                <h3 className="text-uppercase text-center mb-4">Login</h3>
 
-            <div className="form-group">
-                <label htmlFor="username">password</label>
-                <input type="text" className="form-control" id="password"
-                    onChange={handleChangeInput} value={userData.password}
-                />
-            </div>
+                <div className="form-group">
+                    <label htmlFor="username">Username</label>
+                    <input type="text" className="form-control" id="username"
+                        onChange={handleChangeInput} value={userData.username}
+                    />
+                </div>
 
-            <button onClick={Submit}>Submit</button>
-            {dataLogin && <span>
-                <img src={dataLogin.avatar}></img>
-            </span>}
+                <div className="form-group">
+                    <label htmlFor="username">Password</label>
+                    <input type="text" className="form-control" id="password"
+                        onChange={handleChangeInput} value={userData.password}
+                    />
+                </div>
+
+                {
+                    dataLogin !== "" && dataLogin.avatar && <div className="block-image">
+                        <img src={dataLogin.avatar} alt="" id="img" className="pre-image" />
+                    </div>
+                }
+
+                < button
+                    type="submit"
+                    className="btn btn-dark w-100"
+                    // disabled={email && password ? false : true}
+                    onClick={Submit}
+                >
+                    Login
+                </button>
+
+                <p className="my-2">
+                    You don't have an account?{" "}
+                    <Link to="/register" style={{ color: "crimson" }}>
+                        Register Now
+                    </Link>
+                </p>
+            </div >
         </div >
     )
 }

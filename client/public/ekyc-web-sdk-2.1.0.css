@@ -865,7 +865,7 @@ body {
   }
   #notice-ani {
     width: 320px !important;
-    top: 10% !important;
+    top: 0% !important;
     /* margin: auto;
     position: relative; */
   }

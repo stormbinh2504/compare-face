@@ -1,0 +1,15 @@
+
+
+.app {
+  width     : 100vw;
+  height    : 100vh;
+  background: linear-gradient(85.95deg, #1D4289 19.52%, #00B74F 81.02%);
+  position  : relative;
+
+  .main {
+    position : absolute;
+    top      : 50%;
+    left     : 50%;
+    transform: translate(-50%, -50%);
+  }
+}

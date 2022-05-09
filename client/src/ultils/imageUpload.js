@@ -1,3 +1,4 @@
+import imageCompression from 'browser-image-compression';
 export const checkImage = (file) => {
     let err = ""
     if (!file) return err = "File does not exist."
@@ -58,4 +59,24 @@ export const imageUpload = async (images) => {
     // const urlImage = await res.json().secure_url
 
     return urlImage
+}
+
+const options = {
+    maxSizeMB: 1,            // (default: Number.POSITIVE_INFINITY)      // optional, fileType override e.g., 'image/jpeg', 'image/png' (default: file.type)
+    initialQuality: 0.7,       // optional, initial quality value between 0 and 1 (default: 1)
+    alwaysKeepResolution: true // optional, only reduce quality, always keep width and height (default: false)
+}
+
+
+export const compressImage = async (file)=> {
+    let imageOptimize
+    await imageCompression(file, { ...options, fileType: (file && file.type) ? file.type : 'image/png' })
+        .then((res) => {
+            imageOptimize = res
+        })
+        .catch((error) => {
+
+            alert('Error while compress image', error)
+        })
+    return imageOptimize
 }
