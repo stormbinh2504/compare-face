@@ -16,6 +16,8 @@ import DashBoard from './containers/DashBoard/DashBoard';
 import PrivateRouter from './containers/customRouter/PrivateRouter';
 import Header from './containers/Header/Header';
 import PrivateRouterLogin from './containers/customRouter/PrivateRouterLogin';
+import Sidebar from './containers/Sidebar/Sidebar';
+import Routes from './routes/Routes';
 
 if (typeof window !== "undefined") {
   injectStyle();
@@ -25,14 +27,12 @@ let pathName = window.location.pathname
 let isDashboard = pathName.includes("/dashboard")
 function App() {
   const { auth } = useSelector((state) => state);
-  console.log("binh--auth", auth)
-
   return (
     <>
       <Router>
         {/* <Loading /> */}
         <Alert />
-        <Switch>
+        {/* <Switch>
           <div className="app">
             {auth.isLogin && <Header />}
             <div className={!auth.isLogin ? "container-login" : "container-logined"}>
@@ -43,6 +43,30 @@ function App() {
                 <PrivateRouterLogin exact path="/dashboard" component={DashBoard} />
               </div>
             </div>
+          </div>
+        </Switch> */}
+        <Switch>
+          <div className="app">
+            {!auth.isLogin && < div className="container-logined">
+              <div className="main">
+                <Route exact path="/" component={Login} />
+                <Route exact path="/register" component={Register} />
+                <Route exact path="/compare-face" component={CompareFace} />
+              </div>
+            </div>}
+            {auth.isLogin && <Route
+              render={(props) => (
+                <div className="container-body">
+                  <Header />
+                  <div className="layout-content">
+                    <Sidebar {...props} />
+                    <div className="layout-content-main">
+                      <Routes />
+                    </div>
+                  </div>
+                </div>
+              )}
+            />}
           </div>
         </Switch>
         <ToastContainer
@@ -57,6 +81,7 @@ function App() {
           pauseOnHover
         />
       </Router>
+
     </>
   );
 }

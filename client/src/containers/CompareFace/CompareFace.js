@@ -6,7 +6,7 @@ import { Link, useHistory } from 'react-router-dom'
 import { compressImage } from "../../utils/imageUpload"
 import { sdkVNPTService, authService } from '../../services';
 import { ToastSuccess, ToastError } from '../../utils/ToastUtil'
-import { loginAuthentication } from '../../redux/actions/authAction'
+import { loginAuthentication, alertType } from '../../redux/actions/authAction'
 
 
 import "./CompareFace.scss"
@@ -98,25 +98,26 @@ const CompareFace = () => {
       image_hash_face: data,
     }
 
+    dispatch(alertType(true))
     await sdkVNPTService.compare2Faces(body)
       .then((res) => {
         res = res.data
         if (res && res.statusCode === 200) {
           if (res.object.msg === STATUS_FACE.MATCH) {
+            dispatch(alertType(false))
             ToastSuccess(res.object.result)
-
-            // window.location.pathname = "/dashboard"
-            // setIsOpenModalLogin(true)
             dispatch(loginAuthentication(true))
             setTimeout(() => { history.push("/dashboard") }, 2000)
             localStorage.setItem("firstLogin", true)
           }
           else {
+            dispatch(alertType(false))
             ToastError(res.object.result)
           }
         }
       })
       .catch(error => {
+        dispatch(alertType(false))
         alert("catch" + error)
       })
   }
@@ -170,6 +171,7 @@ const CompareFace = () => {
   const onCloseModalLogin = () => {
     setIsOpenModalLogin(false)
   }
+
   return (
     <div className='compare-face'>
       <div className='block-compare-face container'>

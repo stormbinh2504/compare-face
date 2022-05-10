@@ -93,3 +93,10 @@ export const logout = () => async (dispatch) => {
         })
     }
 }
+
+export const alertType = (type) => async (dispatch) => {
+    dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: type
+    })
+}

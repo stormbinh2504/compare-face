@@ -4,7 +4,7 @@ import { sdkVNPTService, authService } from '../../services';
 import { compressImage } from "../../utils/imageUpload"
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useHistory } from 'react-router-dom'
-import { login } from '../../redux/actions/authAction'
+import { login, alertType } from '../../redux/actions/authAction'
 import { ToastSuccess, ToastError } from '../../utils/ToastUtil'
 import { postDataAPI } from '../../utils/fetchData'
 
@@ -31,20 +31,23 @@ const Login = () => {
         let body = {
             ...userData,
         }
-
+        dispatch(alertType(true))
         try {
             await postDataAPI('login', body)
                 .then(res => {
                     if (res) {
+                        dispatch(alertType(false))
                         ToastSuccess(res.data.msg);
                         dispatch(login(res))
                         history.push("/compare-face")
                     }
                 })
                 .catch(error => {
+                    dispatch(alertType(false))
                     ToastError("Username or password not correct");
                 });
         } catch (err) {
+            dispatch(alertType(false))
             ToastError("error");
         }
 

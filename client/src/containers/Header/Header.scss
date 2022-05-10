@@ -1,14 +1,31 @@
-.header {
-    display        : flex;
-    justify-content: space-between;
-    align-items    : center;
-    height         : 56px;
-    background     : #131231;
-    width          : 100%;
-    padding        : 0 10px;
-    font-weight    : 500;
-    font-size      : 14px;
-    color          : #fff;
-    position       : absolute;
-    top            : 0;
+.header-ekyc {
+    display           : flex;
+    justify-content   : flex-end;
+    align-items       : center;
+    height            : 56px;
+    background        : #1d1d1d;
+    width             : 100%;
+    padding           : 0 10px;
+    font-weight       : 500;
+    font-size         : 14px;
+    color             : #fff;
+    // position       : absolute;
+    top               : 0;
+
+
+    .header-right-ekyc {
+        display: flex;
+        height : 100%;
+
+        .header-menu-ekyc {
+            display        : flex;
+            justify-content: flex-end;
+            gap            : 20px;
+            align-items    : center;
+
+            .item-menu {
+                text-align: center;
+            }
+        }
+    }
 }

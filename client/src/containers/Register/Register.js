@@ -5,7 +5,7 @@ import { sdkVNPTService, authService, ekycServer } from '../../services';
 import { compressImage } from "../../utils/imageUpload"
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useHistory } from 'react-router-dom'
-import { register } from '../../redux/actions/authAction'
+import { alertType } from '../../redux/actions/authAction'
 import { ToastSuccess, ToastError } from '../../utils/ToastUtil'
 import { postDataAPI } from '../../utils/fetchData'
 
@@ -97,10 +97,12 @@ const Register = () => {
             hashAvatar: hashCode,
         }
 
+        dispatch(alertType(true))
         try {
             await postDataAPI('register', body)
                 .then(res => {
                     if (res) {
+                        dispatch(alertType(false))
                         ToastSuccess(res.data.msg);
                         setUserData({
                             "username": "",
@@ -112,9 +114,11 @@ const Register = () => {
                     }
                 })
                 .catch(error => {
+                    dispatch(alertType(false))
                     ToastError(error.response.data.msg);
                 });
         } catch (err) {
+            dispatch(alertType(false))
             ToastError("error");
         }
     }

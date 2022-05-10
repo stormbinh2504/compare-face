@@ -5,7 +5,7 @@ import "./DashBoard.scss"
 const DashBoard = () => {
     return (
         <div className='container-body'>
-            <h1>WELCOME</h1>
+            <img src="https://lop12.edu.vn/wp-content/uploads/2017/02/hoc-vien-ky-thuat-mat-ma-ha-noi.jpg" />
         </div>
     )
 }
