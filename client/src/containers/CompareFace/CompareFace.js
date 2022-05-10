@@ -6,6 +6,8 @@ import { Link, useHistory } from 'react-router-dom'
 import { compressImage } from "../../utils/imageUpload"
 import { sdkVNPTService, authService } from '../../services';
 import { ToastSuccess, ToastError } from '../../utils/ToastUtil'
+import { loginAuthentication } from '../../redux/actions/authAction'
+
 
 import "./CompareFace.scss"
 import ModalLogin from '../Modal/ModalLogin';
@@ -16,6 +18,7 @@ const STATUS_FACE = {
 
 const CompareFace = () => {
   const history = useHistory()
+  const dispatch = useDispatch()
   const { auth } = useSelector((state) => state);
   console.log("binh---auth1", auth)
 
@@ -91,7 +94,7 @@ const CompareFace = () => {
   const handleCompare2Faces = async (data) => {
     const body = {
       // image_hash_front: "idg20220508-d0d3238d-6720-3187-e053-62199f0ac777/IDG01_a2900e27-cea8-11ec-bad5-99fd408e3de2",
-      image_hash_front: auth.user.hashAvatar,
+      image_hash_front: auth.userInfor.user.hashAvatar,
       image_hash_face: data,
     }
 
@@ -101,9 +104,12 @@ const CompareFace = () => {
         if (res && res.statusCode === 200) {
           if (res.object.msg === STATUS_FACE.MATCH) {
             ToastSuccess(res.object.result)
-            // history.push("/dashboard")
+
             // window.location.pathname = "/dashboard"
-            setIsOpenModalLogin(true)
+            // setIsOpenModalLogin(true)
+            dispatch(loginAuthentication(true))
+            setTimeout(() => { history.push("/dashboard") }, 2000)
+            localStorage.setItem("firstLogin", true)
           }
           else {
             ToastError(res.object.result)

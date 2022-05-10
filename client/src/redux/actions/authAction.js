@@ -12,9 +12,15 @@ export const login = (res) => async (dispatch) => {
             user: res.data.user
         }
     })
-    localStorage.setItem("firstLogin", true)
 }
 
+
+export const loginAuthentication = (isLogin) => async (dispatch) => {
+    dispatch({
+        type: GLOBALTYPES.LOGIN_AUTHENTICATION,
+        payload: isLogin
+    })
+}
 
 export const refreshToken = () => async (dispatch) => {
     const firstLogin = localStorage.getItem("firstLogin")

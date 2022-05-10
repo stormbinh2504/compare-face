@@ -5,7 +5,6 @@ import "./DashBoard.scss"
 const DashBoard = () => {
     return (
         <div className='container-body'>
-            <Header />
             <h1>WELCOME</h1>
         </div>
     )

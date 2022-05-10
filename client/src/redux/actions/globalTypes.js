@@ -3,6 +3,8 @@ export const GLOBALTYPES = {
     ALERT: "ALERT",
     THEME: 'THEME',
     STATUS: 'STATUS',
+
+    LOGIN_AUTHENTICATION: "LOGIN_AUTHENTICATION"
 }
 
 export const EditData = (data, id, post) => {

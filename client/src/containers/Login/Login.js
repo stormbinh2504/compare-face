@@ -73,8 +73,8 @@ const Login = () => {
                 </div>
 
                 {
-                    auth !== "" && auth.avatar && <div className="block-image">
-                        <img src={auth.avatar} alt="" id="img" className="pre-image" />
+                    auth !== "" && auth.userInfor.avatar && <div className="block-image">
+                        <img src={auth.userInfor.avatar} alt="" id="img" className="pre-image" />
                     </div>
                 }
 
