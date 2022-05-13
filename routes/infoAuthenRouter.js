@@ -1,6 +1,8 @@
 const router = require('express').Router()
 const infoAuthenCtrl = require('../controllers/infoAuthenCtrl')
 
-router.post('/otp', infoAuthenCtrl.sendOTPEmail)
+router.post('/gen-otp', infoAuthenCtrl.sendOTPEmail)
+
+router.post('/verify-otp', infoAuthenCtrl.verifyOTPEmail)
 
 module.exports = router

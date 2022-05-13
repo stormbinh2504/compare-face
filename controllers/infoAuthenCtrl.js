@@ -1,6 +1,6 @@
 
 const sendEmail = require("../ultils/sendEmail")
-const { genOTP } = require("../ultils/gen2FA")
+const { genOTP, verifyOTP } = require("../ultils/gen2FA")
 const Users = require("../models/userModel");
 const OTPs = require("../models/otpModel");
 
@@ -9,7 +9,7 @@ const infoAuthenCtrl = {
         try {
             const { email } = req.body;
 
-            let OTPCode = await genOTP(6)
+            let OTPCode = await genOTP()
             let infoEmail = await sendEmail(email, OTPCode)
             let foundOTP = await OTPs.findOne({ email: email })
 
@@ -31,6 +31,25 @@ const infoAuthenCtrl = {
                 OTP: OTPCode,
             });
 
+        } catch (err) {
+            return res.status(500).json({ msg: err.message });
+        }
+
+    },
+    verifyOTPEmail: async (req, res) => {
+        try {
+            const { numberOTP } = req.body;
+            let OTPCode = await verifyOTP(numberOTP)
+            if (OTPCode) {
+                res.json({
+                    msg: "Verify OTP Success!",
+                    OTPCode: OTPCode,
+                });
+            } else {
+                res.json({
+                    msg: "Verify OTP fail!",
+                });
+            }
         } catch (err) {
             return res.status(500).json({ msg: err.message });
         }
