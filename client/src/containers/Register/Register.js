@@ -44,7 +44,8 @@ const Register = () => {
     const [userData, setUserData] = useState({
         "username": "",
         "password": "",
-        "avatar": ""
+        "avatar": "",
+        "email": ""
     })
 
     const [avatar, setAvatar] = useState(null)
@@ -107,7 +108,8 @@ const Register = () => {
                         setUserData({
                             "username": "",
                             "password": "",
-                            "avatar": ""
+                            "avatar": "",
+                            "email": ""
                         })
 
                         setImagPreURL("")
@@ -142,6 +144,14 @@ const Register = () => {
                     <input type="text" className="form-control" id="password"
                         name="password"
                         onChange={handleChangeInput} value={userData.password}
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="email">Email</label>
+                    <input type="text" className="form-control" id="email"
+                        name="email"
+                        onChange={handleChangeInput} value={userData.email}
                     />
                 </div>
 

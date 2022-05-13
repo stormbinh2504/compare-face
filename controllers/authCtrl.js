@@ -2,16 +2,21 @@ const Users = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+const RegPhone = /^[0-9]*$/;
+const RegEmail = /^[a-zA-Z0-9_\.]{1,32}@[a-zA-Z0-9]{2,}(\.[a-zA-Z0-9]{2,4}){1,2}$/
 
 const authCtrl = {
     register: async (req, res) => {
         try {
-            const { username, password, avatar, hashAvatar } = req.body;
+            const { username, password, avatar, hashAvatar, email } = req.body;
+
             let newUserName = username.toLowerCase().replace(/ /g, "");
+            const _username = await Users.findOne({ username: newUserName });
 
-            const user_name = await Users.findOne({ username: newUserName });
+            const _email = await Users.findOne({ email: email });
 
-            if (user_name)
+
+            if (_username)
                 return res.status(400).json({ msg: "This user name already exists." });
 
             if (password.length < 6)
@@ -20,11 +25,25 @@ const authCtrl = {
                     .json({ msg: "Password must be at least 6 characters." });
             const passwordHash = await bcrypt.hash(password, 12);
 
+            // if (_email)
+            //     return res.status(400).json({ msg: "This email already exists." });
+
+            if (email) {
+                isCheckEmail = RegEmail.test(email);
+                if (!isCheckEmail) {
+                    return res
+                        .status(400)
+                        .json({ msg: "Invalid email" });
+                }
+            }
+
+
             const newUser = new Users({
                 username: username,
                 password: passwordHash,
                 avatar: avatar,
                 hashAvatar: hashAvatar,
+                email: email,
             });
 
             const access_token = createAccessToken({ id: newUser._id });

@@ -14,10 +14,21 @@ const userSchema = new mongoose.Schema({
     avatar: {
         type: String,
         required: true,
+        default: ""
         // default: 'https://res.cloudinary.com/stormbinh2504/image/upload/v1624526109/hinh_anh_dep_girl_xinh_2018-_hinh_gai_xinh_1_cyxxxg.jpg'
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    phone: {
+        type: String,
+        default: ""
     },
     hashAvatar: {
         type: String,
+        default: ""
     }
 }, {
     timestamps: true

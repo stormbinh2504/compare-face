@@ -9,6 +9,8 @@ app.use(express.json())
 app.use(cors())
 
 app.use('/api', require('./routes/authRouter'))
+app.use('/api', require('./routes/infoAuthenRouter'))
+app.use('/api', require('./routes/userRouter'))
 
 
 const URI = process.env.MONGODB_URL

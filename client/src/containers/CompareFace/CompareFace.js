@@ -51,6 +51,11 @@ const CompareFace = () => {
     script1.async = true;
     document.body.appendChild(script1);
 
+
+    //config hardcode load thư viện
+    dispatch(alertType(true))
+    setTimeout(() => { dispatch(alertType(false)) }, 2000)
+
   }, []);
 
   const removeLibFromDom = () => {
