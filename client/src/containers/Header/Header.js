@@ -9,7 +9,7 @@ const Header = () => {
     const dispatch = useDispatch()
     const HandleLogout = () => {
         dispatch(loginAuthentication(false))
-        history.push("/")
+        history.push("/login")
     }
     return (
         <div className='header-ekyc'>

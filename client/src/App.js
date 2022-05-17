@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.scss';
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Login from './containers/Login/Login';
 import Register from './containers/Register/Register';
@@ -49,9 +49,16 @@ function App() {
           <div className="app">
             {!auth.isLogin && < div className="container-logined">
               <div className="main">
-                <Route exact path="/" component={Login} />
-                <Route exact path="/register" component={Register} />
-                <Route exact path="/compare-face" component={CompareFace} />
+                <Switch>
+                  <Route exact path="/login" component={Login} />
+                  <Route exact path="/register" component={Register} />
+                  <Route exact path="/compare-face" component={CompareFace} />
+
+                  <Route exact render={(props) => (
+                    <Redirect to="/login" />
+                  )} />
+
+                </Switch>
               </div>
             </div>}
             {auth.isLogin && <Route
