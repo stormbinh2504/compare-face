@@ -18,8 +18,8 @@ async function genOTP(number) {
         secret: process.env.OTP_KEY,
         encoding: 'base32',
         digits: 6,
-        step: 10,
-        window: 1
+        step: 60,
+        window: 10
     });
 }
 
@@ -28,8 +28,8 @@ async function verifyOTP(token) {
         secret: process.env.OTP_KEY,
         encoding: 'base32',
         token: token,
-        step: 10,
-        window: 1,
+        step:60,
+        window: 10,
     });
 }
 

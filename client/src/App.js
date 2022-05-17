@@ -18,6 +18,7 @@ import Header from './containers/Header/Header';
 import PrivateRouterLogin from './containers/customRouter/PrivateRouterLogin';
 import Sidebar from './containers/Sidebar/Sidebar';
 import Routes from './routes/Routes';
+import CompareOTP from './containers/CompareOTP/CompareOTP';
 
 if (typeof window !== "undefined") {
   injectStyle();
@@ -53,7 +54,8 @@ function App() {
                   <Route exact path="/login" component={Login} />
                   <Route exact path="/register" component={Register} />
                   <Route exact path="/compare-face" component={CompareFace} />
-
+                  <Route exact path="/compare-otp" component={CompareOTP} />
+                  {/* <Route exact path="/otp" component={CompareOTP} /> */}
                   <Route exact render={(props) => (
                     <Redirect to="/login" />
                   )} />
