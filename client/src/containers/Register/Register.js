@@ -10,6 +10,7 @@ import { ToastSuccess, ToastError } from '../../utils/ToastUtil'
 import { postDataAPI } from '../../utils/fetchData'
 
 import axios from 'axios';
+import RegisterOTP from './RegisterOTP';
 
 const Register = () => {
 
@@ -17,6 +18,7 @@ const Register = () => {
     const history = useHistory()
 
     const [imagePreURL, setImagPreURL] = useState("")
+    const [step, setStep] = useState(1)
 
     const imageHandler = (file) => {
         const reader = new FileReader();
@@ -111,7 +113,7 @@ const Register = () => {
                             "avatar": "",
                             "email": ""
                         })
-
+                        setStep(1)
                         setImagPreURL("")
                     }
                 })
@@ -125,11 +127,19 @@ const Register = () => {
         }
     }
 
+    const nextStep = () => {
+        setStep(step + 1)
+    }
+
+    const backStep = () => {
+        setStep(step - 1)
+    }
+
     let disableSubmit = imagePreURL !== "" && userData.password !== "" && userData.username !== ""
 
     return (
         <div div className='regiter' >
-            <div div className='form-regiter' >
+            {step === 1 && <div div className='form-regiter' >
                 <h3 className="text-uppercase text-center mb-4">Register</h3>
                 <div className="form-group">
                     <label htmlFor="username">Username</label>
@@ -175,12 +185,18 @@ const Register = () => {
                     />
                 </div>
 
-                <button className="btn btn-dark w-100" onClick={Submit} disabled={!disableSubmit} >Register</button>
+                <button className="btn btn-dark w-100" onClick={nextStep} disabled={!disableSubmit} >Register</button>
 
                 <p className="my-2">
                     Already have an account? <Link to="/" style={{ color: "crimson" }}>Login Now</Link>
                 </p>
-            </div>
+            </div>}
+            {step === 2 &&
+                <RegisterOTP
+                    Submit={Submit}
+                    email={userData.email}
+                    backStep={backStep}
+                />}
         </div >
     )
 }

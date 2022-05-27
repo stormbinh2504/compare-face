@@ -44,10 +44,12 @@ const infoAuthenCtrl = {
                 res.json({
                     msg: "Verify OTP Success!",
                     OTPCode: OTPCode,
+                    isVerifyEmail: true,
                 });
             } else {
                 res.json({
                     msg: "Verify OTP fail!",
+                    isVerifyEmail: false,
                 });
             }
         } catch (err) {
